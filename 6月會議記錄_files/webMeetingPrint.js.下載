@@ -1,0 +1,46 @@
+angular.module('meetingPrint', ['ngSanitize'])
+
+.controller('meetingPrintCtrl', function($scope, $window, $filter, $sce) {
+
+    $scope.obj = $window.obj;
+
+    console.log("$scope.obj : ", $scope.obj);
+    $scope.meeting = $scope.obj.meeting;
+    $scope.meet_type_item_list = $scope.obj.meet_type_item_list;
+    $scope.meeting_item = $scope.obj.meeting_item;
+    $scope.peopleList = $scope.obj.meeting_people.list;
+    $scope.people_count = $scope.obj.meeting_people.count_obj;
+    $scope.readList = $scope.obj.readList;
+    $scope.type = $scope.obj.type; //1為畫面列印 2為議程列印
+    $scope.print_time = "";
+
+    this.initPrint = function() {
+        var getNowTime = function(type) {
+            var n = new Date();
+            var y = (n.getFullYear() - 1911);
+            var M = (n.getMonth() < 9) ? "0" + (n.getMonth() + 1) : (n.getMonth() + 1).toString();
+            var d = (n.getDate() < 9) ? "0" + n.getDate() : n.getDate().toString();
+            var h = (n.getHours() < 9) ? "0" + n.getHours() : n.getHours().toString();
+            var m = (n.getMinutes() < 9) ? "0" + n.getMinutes() : n.getMinutes().toString();
+            var today = "";
+            if (type == "1") {
+                today = M + "-" + d + " " + h + ":" + m;
+            } else if (type == "2") {
+                today = y + "-" + M + "-" + d;
+            } else {
+                today = y + "-" + M + "-" + d + " " + h + ":" + m;
+            }
+            return today;
+        };
+
+        $scope.print_time = getNowTime();
+        console.log($scope.print_time);
+    };
+
+    this.initPrint();
+    
+    $scope.txtTurnHtml = function(string) {
+      return $sce.trustAsHtml(string);
+    };
+
+});
